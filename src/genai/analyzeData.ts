@@ -11,17 +11,11 @@ On a random evening while scrolling through twitter I saw many of you making coo
 Frankly that's a fine lifestyle, people have various ways of spending their free time but for me I had to pick up something that makes me push my limits and learn, and that's how I just started solving DSA again and picked up system design properly`;
 
 export async function analyzeData() {
-    const summary = await summarizeChain.invoke({ text });
+    const [summary, sentiment, keywords] = await Promise.all([
+        summarizeChain.invoke({ text }),
+        sentimentChain.invoke({ text }),
+        keywordChain.invoke({ text }),
+    ]);
 
-    const sentiment = await sentimentChain.invoke({ text });
-    const keywords = await keywordChain.invoke({ text });
-
-    console.log("summary : \n");
-    console.log(summary.content);
-
-    console.log("\n\nSentiment : \n");
-    console.log(sentiment.content);
-
-    console.log("\n\nKeywords : \n");
-    console.log(keywords.content);
+    return { summary, sentiment, keywords };
 }
