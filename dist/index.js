@@ -8,19 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)();
+const express_1 = __importDefault(require("express"));
 const analyzeData_1 = require("./genai/analyzeData");
-const text = `This has been quite a ride, a lot of you were with me from the start, many joined in between and I thank each and everyone of you for your support and motivation
-
-Only a few knows why I started this in the first place, I was feeling a bit stagnant in my life, was not finding happiness in a lot of things and felt am just watching each day glide by me
-
-I had been feeling like this for a while infact but never really tried to root cause it.
-
-On a random evening while scrolling through twitter I saw many of you making cool stuff or upskilling in one form or another, I realized if I don't get back to learning I will become like those employees who don't have knowledge outside of what they learn at work. 
-
-Frankly that's a fine lifestyle, people have various ways of spending their free time but for me I had to pick up something that makes me push my limits and learn, and that's how I just started solving DSA again and picked up system design properly`;
-(function () {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield (0, analyzeData_1.analyzeData)(text);
+const app = (0, express_1.default)();
+const PORT = process.env.PORT || 4000;
+app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { summary, sentiment, keywords } = yield (0, analyzeData_1.analyzeData)();
+    res.status(200).json({
+        success: true,
+        data: {
+            summary: summary.content,
+            sentiment: sentiment.content,
+            keywords: keywords.content,
+        },
     });
-})();
+}));
+app.get("/status", (req, res) => {
+    res.json({ success: true, message: "server online" });
+});
+app.listen(PORT, () => {
+    console.log("Listening on port ", PORT);
+});
