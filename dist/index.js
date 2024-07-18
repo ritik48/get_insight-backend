@@ -32,6 +32,10 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 app.get("/status", (req, res) => {
     res.json({ success: true, message: "server online" });
 });
+app.use((err, req, res, next) => {
+    const { status = 500, message } = err;
+    res.status(status).json({ success: false, message });
+});
 app.listen(PORT, () => {
     console.log("Listening on port ", PORT);
 });

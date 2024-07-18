@@ -1,6 +1,11 @@
 import { config } from "dotenv";
 config();
-import express, { Request, Response } from "express";
+import express, {
+    NextFunction,
+    Request,
+    RequestHandler,
+    Response,
+} from "express";
 import { analyzeData } from "./genai/analyzeData";
 import { isAuthenticated } from "./utils/midllewares";
 
@@ -23,6 +28,12 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.get("/status", (req: Request, res: Response) => {
     res.json({ success: true, message: "server online" });
+});
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    const { status = 500, message } = err;
+
+    res.status(status).json({ success: false, message });
 });
 
 app.listen(PORT, () => {
