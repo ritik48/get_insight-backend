@@ -2,6 +2,7 @@ import { config } from "dotenv";
 config();
 import express, { Request, Response } from "express";
 import { analyzeData } from "./genai/analyzeData";
+import { isAuthenticated } from "./utils/midllewares";
 
 const app = express();
 
