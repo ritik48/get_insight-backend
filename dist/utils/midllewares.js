@@ -10,15 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthenticated = void 0;
+const ApiError_1 = require("./ApiError");
 const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const authorization_header = req.headers["authorization"];
         if (!authorization_header) {
-            throw new Error("User not authenticated");
+            throw new ApiError_1.ApiError(401, "User not authenticated");
         }
         const token = authorization_header.split(" ")[1];
         if (!token) {
-            throw new Error("User not authenticated");
+            throw new ApiError_1.ApiError(401, "User not authenticated");
         }
         console.log("token = ", token);
         next();

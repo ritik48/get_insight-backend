@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { ApiError } from "./ApiError";
 
 const isAuthenticated = async (
     req: Request,
@@ -8,13 +9,13 @@ const isAuthenticated = async (
     try {
         const authorization_header = req.headers["authorization"];
         if (!authorization_header) {
-            throw new Error("User not authenticated");
+            throw new ApiError(401, "User not authenticated");
         }
 
         const token = authorization_header.split(" ")[1];
 
         if (!token) {
-            throw new Error("User not authenticated");
+            throw new ApiError(401, "User not authenticated");
         }
         console.log("token = ", token);
         next();
