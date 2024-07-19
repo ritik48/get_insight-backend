@@ -1,3 +1,3 @@
 {
-    "reqrites": [{ "source": "/(.*)", "destination": "/(.*)" }]
+    "rewrites": [{ "source": "/(.*)", "destination": "/(.*)" }]
 }
