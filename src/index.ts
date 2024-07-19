@@ -11,10 +11,14 @@ import { isAuthenticated } from "./utils/midllewares";
 
 const app = express();
 
+app.use(express.json());
+
 const PORT = process.env.PORT || 4000;
 
-app.get("/", async (req: Request, res: Response) => {
-    const { summary, sentiment, keywords } = await analyzeData();
+app.post("/", async (req: Request, res: Response) => {
+    const { text } = req.body;
+
+    const { summary, sentiment, keywords } = await analyzeData(text);
 
     res.status(200).json({
         success: true,

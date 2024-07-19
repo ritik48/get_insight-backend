@@ -17,9 +17,11 @@ const dotenv_1 = require("dotenv");
 const express_1 = __importDefault(require("express"));
 const analyzeData_1 = require("./genai/analyzeData");
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
 const PORT = process.env.PORT || 4000;
-app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { summary, sentiment, keywords } = yield (0, analyzeData_1.analyzeData)();
+app.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { text } = req.body;
+    const { summary, sentiment, keywords } = yield (0, analyzeData_1.analyzeData)(text);
     res.status(200).json({
         success: true,
         data: {
