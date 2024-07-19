@@ -12,11 +12,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTempSavedFilePath = void 0;
+exports.upload = exports.getTempSavedFilePath = void 0;
 const os_1 = __importDefault(require("os"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const multer_1 = __importDefault(require("multer"));
 const ApiError_1 = require("./ApiError");
+const allowedFileTypes = [".txt", ".pdf", ".doc", ".docx"];
+const storage = multer_1.default.memoryStorage();
+const upload = (0, multer_1.default)({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024,
+    },
+    fileFilter: (req, file, cb) => {
+        const extension = path_1.default.extname(file.originalname);
+        if (allowedFileTypes.includes(extension.toLowerCase())) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error("Only these file types are allowed : " +
+                allowedFileTypes.join(", ")));
+        }
+    },
+});
+exports.upload = upload;
 const getTempSavedFilePath = (req) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const tempPath = os_1.default.tmpdir();

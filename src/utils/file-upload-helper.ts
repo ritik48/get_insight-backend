@@ -1,8 +1,34 @@
 import os from "os";
 import fs from "fs";
 import path from "path";
-import { ApiError } from "./ApiError";
 import { Request } from "express";
+import multer from "multer";
+
+import { ApiError } from "./ApiError";
+
+const allowedFileTypes = [".txt", ".pdf", ".doc", ".docx"];
+
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024,
+    },
+    fileFilter: (req, file, cb) => {
+        const extension = path.extname(file.originalname);
+
+        if (allowedFileTypes.includes(extension.toLowerCase())) {
+            cb(null, true);
+        } else {
+            cb(
+                new Error(
+                    "Only these file types are allowed : " +
+                        allowedFileTypes.join(", ")
+                )
+            );
+        }
+    },
+});
 
 const getTempSavedFilePath = async (req: Request) => {
     const tempPath = os.tmpdir();
@@ -17,4 +43,4 @@ const getTempSavedFilePath = async (req: Request) => {
     }
 };
 
-export { getTempSavedFilePath };
+export { getTempSavedFilePath, upload };
