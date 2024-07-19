@@ -20,7 +20,7 @@ I had been feeling like this for a while infact but never really tried to root c
 On a random evening while scrolling through twitter I saw many of you making cool stuff or upskilling in one form or another, I realized if I don't get back to learning I will become like those employees who don't have knowledge outside of what they learn at work. 
 
 Frankly that's a fine lifestyle, people have various ways of spending their free time but for me I had to pick up something that makes me push my limits and learn, and that's how I just started solving DSA again and picked up system design properly`;
-function analyzeData() {
+function analyzeData(text) {
     return __awaiter(this, void 0, void 0, function* () {
         const [summary, sentiment, keywords] = yield Promise.all([
             llmchains_1.summarizeChain.invoke({ text }),
