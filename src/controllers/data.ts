@@ -1,10 +1,14 @@
 import fs from "fs";
 import { Request, Response } from "express";
 
-import { getTempSavedFilePath } from "../utils/file-upload-helper";
+import {
+    getTempSavedFilePath,
+    uploadToCloudinary,
+} from "../utils/file-upload-helper";
 import { loadText } from "../genai/textLoaders";
 import { analyzeData } from "../genai/analyzeData";
 import { ApiError } from "../utils/ApiError";
+import { UploadApiResponse } from "cloudinary";
 
 const fetchDataAnalytics = async (req: Request, res: Response) => {
     if (!req.file && !req.body?.text) {
@@ -19,6 +23,9 @@ const fetchDataAnalytics = async (req: Request, res: Response) => {
     let textContent;
     let tempFilePath;
 
+    let upload_result: UploadApiResponse | undefined;
+
+    // if user sent a file
     if (type_of_data === "file") {
         if (!req.file) {
             throw new ApiError(400, "File not provided");
@@ -27,7 +34,16 @@ const fetchDataAnalytics = async (req: Request, res: Response) => {
         tempFilePath = await getTempSavedFilePath(req);
         const textDocument = await loadText(tempFilePath);
         textContent = textDocument[0].pageContent;
-    } else {
+
+        // upload file to clodinary
+        try {
+            upload_result = await uploadToCloudinary(req);
+        } catch (error) {
+            console.log("File upload error ", error);
+        }
+    }
+    // if user sent a text
+    else {
         if (!req.body?.text) {
             throw new ApiError(400, "Text not provided");
         }
@@ -45,6 +61,10 @@ const fetchDataAnalytics = async (req: Request, res: Response) => {
             summary: summary.content,
             sentiment: sentiment.content,
             keywords: keywords.content,
+        },
+        upload_result: {
+            url: upload_result?.secure_url,
+            filename: upload_result?.original_filename,
         },
     });
 };
