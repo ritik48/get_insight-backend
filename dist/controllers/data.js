@@ -29,6 +29,8 @@ const fetchDataAnalytics = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     let textContent;
     let tempFilePath;
+    let upload_result;
+    // if user sent a file
     if (type_of_data === "file") {
         if (!req.file) {
             throw new ApiError_1.ApiError(400, "File not provided");
@@ -36,7 +38,15 @@ const fetchDataAnalytics = (req, res) => __awaiter(void 0, void 0, void 0, funct
         tempFilePath = yield (0, file_upload_helper_1.getTempSavedFilePath)(req);
         const textDocument = yield (0, textLoaders_1.loadText)(tempFilePath);
         textContent = textDocument[0].pageContent;
+        // upload file to clodinary
+        try {
+            upload_result = yield (0, file_upload_helper_1.uploadToCloudinary)(req);
+        }
+        catch (error) {
+            console.log("File upload error ", error);
+        }
     }
+    // if user sent a text
     else {
         if (!((_c = req.body) === null || _c === void 0 ? void 0 : _c.text)) {
             throw new ApiError_1.ApiError(400, "Text not provided");
@@ -52,6 +62,10 @@ const fetchDataAnalytics = (req, res) => __awaiter(void 0, void 0, void 0, funct
             summary: summary.content,
             sentiment: sentiment.content,
             keywords: keywords.content,
+        },
+        upload_result: {
+            url: upload_result === null || upload_result === void 0 ? void 0 : upload_result.secure_url,
+            filename: upload_result === null || upload_result === void 0 ? void 0 : upload_result.original_filename,
         },
     });
 });
