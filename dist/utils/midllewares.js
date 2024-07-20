@@ -11,20 +11,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAuthenticated = void 0;
 const ApiError_1 = require("./ApiError");
+const verifyJwt_1 = require("./verifyJwt");
 const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const authorization_header = req.headers["authorization"];
         if (!authorization_header) {
-            throw new ApiError_1.ApiError(401, "User not authenticated");
+            throw new ApiError_1.ApiError(401, "You don't have the required access.");
         }
         const token = authorization_header.split(" ")[1];
         if (!token) {
-            throw new ApiError_1.ApiError(401, "User not authenticated");
+            throw new ApiError_1.ApiError(401, "You don't have the required access.");
         }
-        console.log("token = ", token);
+        try {
+            yield (0, verifyJwt_1.verifyJwt)(token);
+        }
+        catch (error) {
+            throw new ApiError_1.ApiError(400, "You don't have the required access.");
+        }
         next();
     }
     catch (error) {
+        console.log("error = ", error);
         next(error);
     }
 });
