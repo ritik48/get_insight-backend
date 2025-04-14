@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.catchAsync = void 0;
+exports.catchAsync = catchAsync;
 function catchAsync(fn) {
     return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
@@ -20,4 +20,3 @@ function catchAsync(fn) {
         }
     });
 }
-exports.catchAsync = catchAsync;

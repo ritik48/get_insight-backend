@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.analyzeData = void 0;
+exports.analyzeData = analyzeData;
 const llmchains_1 = require("./llmchains");
 const text = `This has been quite a ride, a lot of you were with me from the start, many joined in between and I thank each and everyone of you for your support and motivation
 
@@ -30,4 +30,3 @@ function analyzeData(text) {
         return { summary, sentiment, keywords };
     });
 }
-exports.analyzeData = analyzeData;

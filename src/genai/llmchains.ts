@@ -10,7 +10,7 @@ const sentimentPrompt = PromptTemplate.fromTemplate(
 );
 
 const keywordsPrompt = PromptTemplate.fromTemplate(
-    "Extract the main keywords from the following text:\n\n{text}\n\nKeywords:"
+    "Extract the main keywords from the following text without any special symbols:\n\n{text}\n\nKeywords:"
 );
 
 const summarizeChain = summarizePrompt.pipe(model);

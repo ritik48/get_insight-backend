@@ -6,7 +6,7 @@ const generative_ai_1 = require("@google/generative-ai");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 exports.model = new google_genai_1.ChatGoogleGenerativeAI({
-    model: "gemini-pro",
+    model: "gemini-2.0-flash",
     maxOutputTokens: 2048,
     apiKey: process.env.GEMINI_API_KEY,
     safetySettings: [

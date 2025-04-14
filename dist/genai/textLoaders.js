@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadText = void 0;
+exports.loadText = loadText;
 const text_1 = require("langchain/document_loaders/fs/text");
 const pdf_1 = require("@langchain/community/document_loaders/fs/pdf");
 const docx_1 = require("@langchain/community/document_loaders/fs/docx");
@@ -27,4 +27,3 @@ function loadText(filePath) {
     }
     return loader.load();
 }
-exports.loadText = loadText;
