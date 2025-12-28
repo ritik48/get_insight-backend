@@ -15,7 +15,8 @@ app.get("/", (req, res) => {
 });
 app.use((err, req, res, next) => {
     const { status = 500, message } = err;
-    res.status(status).json({ success: false, message });
+    console.log("Error = ", err);
+    res.status(status).json({ success: false, message: message });
 });
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
